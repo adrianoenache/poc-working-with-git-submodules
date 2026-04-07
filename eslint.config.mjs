@@ -19,7 +19,7 @@ export default [...compat.extends("eslint:recommended"), {
             ...globals.commonjs,
         },
 
-        ecmaVersion: 2015,
+        ecmaVersion: 2020,
         sourceType: "script",
     },
 
