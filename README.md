@@ -1,5 +1,9 @@
 # Proof of concept (POC) of working with Git submodules
 
+## Git submodules
+
+- [Proof of concept (POC) of working with Git submodules - Compiled CSS](https://github.com/adrianoenache/poc-working-with-git-submodules-compiled-css)
+
 ## References
 
 - [Git Tools Submodules - git-scm](https://git-scm.com/book/en/v2/Git-Tools-Submodules)
