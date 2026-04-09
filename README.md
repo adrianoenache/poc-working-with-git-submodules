@@ -1,5 +1,15 @@
 # Proof of concept (POC) of working with Git submodules
 
+## Get started
+
+> Important! This repository use git submodule.
+
+### Clone
+
+```bash
+git clone --recurse-submodules git@github.com:adrianoenache/poc-working-with-git-submodules.git <optional-parameter-to-name-the-folder>
+```
+
 ## Git submodules
 
 - [Proof of concept (POC) of working with Git submodules - Compiled CSS](https://github.com/adrianoenache/poc-working-with-git-submodules-compiled-css)
