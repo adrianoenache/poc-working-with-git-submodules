@@ -1,8 +1,67 @@
 # Proof of concept (POC) of working with Git submodules
 
+This repository demonstrates how to work with Git submodules in a front-end project. The submodule `submodules-git/ui-kit-packages` is a UI Kit distribution package that provides a compiled CSS file (`submodules-git/ui-kit-packages/css/main.css`) consumed by the main project.
+
+> Important! This repository uses git submodules.
+
+## Table of Contents
+
+- [Prerequisites](#prerequisites)
+- [Project structure](#project-structure)
+- [Get started](#get-started)
+  - [Add a submodule](#add-a-submodule)
+  - [Clone](#clone)
+  - [Check status](#check-status)
+  - [Submodule update](#submodule-update)
+  - [Lock on commit TAG](#lock-on-commit-tag)
+  - [Remove a submodule](#remove-a-submodule)
+- [Setup & Installation](#setup--installation)
+- [Development](#development)
+- [Pre-commit hooks](#pre-commit-hooks)
+- [License](#license)
+
+## Prerequisites
+
+- Node.js >= 24.14.1
+- npm >= 11.11.0
+- Git (with submodule support)
+
+## Project structure
+
+| Directory | Purpose |
+|---|---|
+| `src/javascript/` | JavaScript source files (components, modules, functions) |
+| `src/stylus/` | Stylus CSS source files (atomic design structure) |
+| `assets/` | Compiled output (JS + CSS) |
+| `submodules-git/ui-kit-packages/` | UI Kit distribution package (git submodule) |
+| `tools/` | Build helper scripts |
+
 ## Get started
 
-> Important! This repository use git submodule.
+### Add a submodule
+
+This command adds a submodule tracking the `main` branch of the remote repository into the `submodules-git/ui-kit-packages` directory.
+
+```bash
+git submodule add -b main git@github.com:adrianoenache/poc-working-with-git-submodules-packages-for-distribution.git submodules-git/ui-kit-packages
+```
+
+After running the command, a `.gitmodules` file is created (or updated) in the root of the repository with the following content:
+
+```ini
+[submodule "submodules-git/ui-kit-packages"]
+    path = submodules-git/ui-kit-packages
+    url = git@github.com:adrianoenache/poc-working-with-git-submodules-packages-for-distribution.git
+    branch = main
+```
+
+Commit the changes to register the submodule in the repository.
+
+```bash
+git add .gitmodules submodules-git/ui-kit-packages
+git commit -m "Add ui-kit-packages as a git submodule"
+git push origin main
+```
 
 ### Clone
 
@@ -10,29 +69,80 @@
 git clone --recurse-submodules git@github.com:adrianoenache/poc-working-with-git-submodules.git <optional-parameter-to-name-the-folder>
 ```
 
-If you clone the repository without the parameters **--recurse-submodules** run the commands to **int**, **sync** and **update** the git submodules in the repository.
+If you clone the repository without the `--recurse-submodules` parameter:
+
+```bash
+git clone git@github.com:adrianoenache/poc-working-with-git-submodules.git
+```
+
+Run the following commands to **init**, **sync** and **update** the git submodules in the repository.
 
 ```bash
 git submodule init && git submodule sync && git submodule update
 ```
 
+### Check status
+
+This command shows the current state of all submodules in the repository.
+
+```bash
+git submodule status
+```
+
+The prefix in each line indicates the current state of the submodule:
+
+| Prefix | Meaning |
+|---|---|
+| ` ` (space) | Submodule is at the same commit as registered in the parent repository |
+| `-` | Submodule is not initialized — run `git submodule init` |
+| `+` | Submodule is at a different commit than the one registered in the parent repository |
+
 ### Submodule update
 
-This command will retrieve the latest commits from the branch configured in the **.gitmodules** file, assuming you have already run commands `git submodule int` and `git submodule sync`.
+This command will retrieve the latest commits from the branch configured in the **.gitmodules** file, assuming you have already run commands `git submodule init` and `git submodule sync`.
 
 ```bash
 git submodule update --remote
 ```
 
-> Commit the changes in the main repository and push it to origin.
+After updating, commit the new submodule pointer and push it to origin.
+
+```bash
+git add submodules-git/ui-kit-packages
+git commit -m "Update ui-kit-packages to latest main"
+git push origin main
+```
+
+> **Note:** These two commands behave differently:
+>
+> | Command | What it does |
+> |---|---|
+> | `git submodule update` | Updates to the commit **recorded in the parent repository** (the pointer stored in `.gitmodules`) |
+> | `git submodule update --remote` | Fetches the **latest commit from the `main` branch** configured in `.gitmodules` |
 
 ### Lock on commit TAG
+
+Navigate into the submodule directory, fetch all remote changes and check out the desired tag.
 
 ```bash
 cd submodules-git/ui-kit-packages/
 
 git fetch --all --prune
 
+git checkout v0.0.1-alpha
+
+cd ../..
+
+git add submodules-git/ui-kit-packages
+
+git commit -m "Lock the git submodule on the tag v0.0.1-alpha"
+
+git push origin main
+```
+
+Expected output from `git fetch --all --prune`:
+
+```
 remote: Enumerating objects: 10, done.
 remote: Counting objects: 100% (10/10), done.
 remote: Compressing objects: 100% (4/4), done.
@@ -42,35 +152,82 @@ From github.com:adrianoenache/poc-working-with-git-submodules-packages-for-distr
    b3b2be0..fb571b5  develop      -> origin/develop
    08ee378..c2f7fa5  main         -> origin/main
  * [new tag]         v0.0.1-alpha -> v0.0.1-alpha
+```
 
-cd ..
-cd ..
+Expected output from `git commit`:
 
-git status
-
-On branch main
-Your branch is up to date with 'origin/main'.
-
-Changes to be committed:
-  (use "git restore --staged <file>..." to unstage)
-        modified:   README.md
-        modified:   submodules-git/ui-kit-packages
-
-git commit -m "Lock the git submodule on the tag v0.0.1-alpha"
-
+```
 [main c6c281b] Lock the git submodule on the tag v0.0.1-alpha
  2 files changed, 7 insertions(+), 1 deletion(-)
 ```
+
+### Remove a submodule
+
+Removing a submodule requires more than one step. Run the following commands from the root of the repository.
+
+```bash
+git submodule deinit submodules-git/ui-kit-packages
+
+git rm submodules-git/ui-kit-packages
+
+rm -rf .git/modules/submodules-git/ui-kit-packages
+
+git commit -m "Remove submodule ui-kit-packages"
+
+git push origin main
+```
+
+> The `git rm` command automatically removes the corresponding entry from `.gitmodules`. There is no need to edit that file manually.
+
+## Setup & Installation
+
+After cloning the repository and initializing the submodules, install all dependencies and start the project:
+
+```bash
+npm run setup
+```
+
+This command runs `npm install`, sets up Husky pre-commit hooks and starts the development watchers.
+
+If you need a clean reinstall (e.g. to resolve dependency conflicts):
+
+```bash
+npm run npm-reinstall
+```
+
+This command removes `node_modules`, clears the npm cache, reinstalls all dependencies and runs `npm audit fix`.
+
+## Development
+
+```bash
+npm run start    # start JS + CSS watchers in parallel
+npm run js       # compile JS only (production)
+npm run css      # lint + compile CSS only
+```
+
+## Pre-commit hooks
+
+This project uses [Husky](https://typicode.github.io/husky/) to run checks automatically before every commit:
+
+| Hook | Command | What it does |
+|---|---|---|
+| pre-commit | `npm run css-lint` | Lints all Stylus source files |
+| pre-commit | `npm run js-lint` | Runs ESLint with auto-fix on JS source files |
+
+Commits are blocked if any lint check fails.
 
 ## Git submodules
 
 - [Proof of concept (POC) of working with Git submodules - Compiled CSS](https://github.com/adrianoenache/poc-working-with-git-submodules-compiled-css)
 
+## License
+
+[MIT](LICENSE)
+
 ## References
 
 - [Git Tools Submodules - git-scm](https://git-scm.com/book/en/v2/Git-Tools-Submodules)
 - [Git clone - git-scm](https://git-scm.com/docs/git-clone)
-- [Git sparse-checkout - git-scm](https://git-scm.com/docs/git-sparse-checkout)
 - [Git submodules - Atlassian](https://www.atlassian.com/br/git/tutorials/git-submodule)
 - [Git submodules - W3schools](https://www.w3schools.com/git/git_submodules.asp)
 - [Working with submodules](https://github.blog/open-source/git/working-with-submodules/)
@@ -78,6 +235,3 @@ git commit -m "Lock the git submodule on the tag v0.0.1-alpha"
 - [Using Git submodules with GitLab CI/CD](https://docs.gitlab.com/ci/runners/git_submodules/)
 - [How to Specify a Branch or Tag When Adding a Git Submodule: Explaining `git submodule add -b` and Commit Tracking](https://www.w3tutorials.net/blog/how-can-i-specify-a-branch-tag-when-adding-a-git-submodule/)
 - [Mastering Git Submodule Tag Commands for Efficient Workflows](https://gitscripts.com/git-submodule-tag)
-- [Git sparse-checkout](https://git-scm.com/docs/git-sparse-checkout)
-- [Git Clone Specific Folder: A Quick Guide](https://gitscripts.com/git-clone-specific-folder)
-- [Bring your monorepo down to size with sparse-checkout](https://github.blog/open-source/git/bring-your-monorepo-down-to-size-with-sparse-checkout/)
