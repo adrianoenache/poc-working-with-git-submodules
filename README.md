@@ -10,6 +10,12 @@
 git clone --recurse-submodules git@github.com:adrianoenache/poc-working-with-git-submodules.git <optional-parameter-to-name-the-folder>
 ```
 
+If you clone the repository without the parameters **--recurse-submodules** run the commands to **int**, **sync** and **update** the git submodules in the repository.
+
+```bash
+git submodule init && git submodule sync && git submodule update
+```
+
 ## Git submodules
 
 - [Proof of concept (POC) of working with Git submodules - Compiled CSS](https://github.com/adrianoenache/poc-working-with-git-submodules-compiled-css)
