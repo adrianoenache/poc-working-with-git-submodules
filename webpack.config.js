@@ -34,7 +34,7 @@ module.exports = {
 
 function entries( main ){
   return glob.sync(config.js.source + '/*.js').reduce(function(x, file) {
-    var name = path.basename(file, '.js')
+    let name = path.basename(file, '.js')
     x[ name ] = path.resolve(config.js.source, name)
     return x
   }, main)
