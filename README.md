@@ -16,6 +16,16 @@ If you clone the repository without the parameters **--recurse-submodules** run 
 git submodule init && git submodule sync && git submodule update
 ```
 
+### Submodule update
+
+This command will retrieve the latest commits from the branch configured in the **.gitmodules** file, assuming you have already run commands `git submodule int` and `git submodule sync`.
+
+```bash
+git submodule update --remote
+```
+
+> Commit the changes in the main repository and push it to origin.
+
 ## Git submodules
 
 - [Proof of concept (POC) of working with Git submodules - Compiled CSS](https://github.com/adrianoenache/poc-working-with-git-submodules-compiled-css)
