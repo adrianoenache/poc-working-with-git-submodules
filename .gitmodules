@@ -1,0 +1,4 @@
+[submodule "submodules-git/ui-kit-packages"]
+	path = submodules-git/ui-kit-packages
+	url = git@github.com:adrianoenache/poc-working-with-git-submodules-packages-for-distribution.git
+	branch = main
