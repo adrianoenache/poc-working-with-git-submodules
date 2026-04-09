@@ -26,6 +26,42 @@ git submodule update --remote
 
 > Commit the changes in the main repository and push it to origin.
 
+### Lock on commit TAG
+
+```bash
+cd submodules-git/ui-kit-packages/
+
+git fetch --all --prune
+
+remote: Enumerating objects: 10, done.
+remote: Counting objects: 100% (10/10), done.
+remote: Compressing objects: 100% (4/4), done.
+remote: Total 6 (delta 2), reused 5 (delta 2), pack-reused 0 (from 0)
+Unpacking objects: 100% (6/6), 1.33 KiB | 123.00 KiB/s, done.
+From github.com:adrianoenache/poc-working-with-git-submodules-packages-for-distribution
+   b3b2be0..fb571b5  develop      -> origin/develop
+   08ee378..c2f7fa5  main         -> origin/main
+ * [new tag]         v0.0.1-alpha -> v0.0.1-alpha
+
+cd ..
+cd ..
+
+git status
+
+On branch main
+Your branch is up to date with 'origin/main'.
+
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+        modified:   README.md
+        modified:   submodules-git/ui-kit-packages
+
+git commit -m "Lock the git submodule on the tag v0.0.1-alpha"
+
+[main c6c281b] Lock the git submodule on the tag v0.0.1-alpha
+ 2 files changed, 7 insertions(+), 1 deletion(-)
+```
+
 ## Git submodules
 
 - [Proof of concept (POC) of working with Git submodules - Compiled CSS](https://github.com/adrianoenache/poc-working-with-git-submodules-compiled-css)
