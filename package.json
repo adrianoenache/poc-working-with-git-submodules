@@ -17,12 +17,12 @@
     "env": "prod",
     "root": "/",
     "js": {
-      "source": "./src/javascript/output",
+      "source": "./src/javascript/entry",
       "output": "./distribution/assets/js",
       "public_path": "./distribution/assets/js/"
     },
     "css": {
-      "source": "src/stylus/output",
+      "source": "src/stylus/entry",
       "lint": "src/stylus",
       "output": "./distribution/assets/css"
     }
