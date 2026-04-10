@@ -32,7 +32,7 @@ This repository demonstrates how to work with Git submodules in a front-end proj
 |---|---|
 | `src/javascript/` | JavaScript source files (components, modules, functions) |
 | `src/stylus/` | Stylus CSS source files (atomic design structure) |
-| `assets/` | Compiled output (JS + CSS) |
+| `distribution/` | Distribution build output (HTML + compiled JS + CSS) |
 | `submodules-git/ui-kit-packages/` | UI Kit distribution package (git submodule) |
 | `tools/` | Build helper scripts |
 
