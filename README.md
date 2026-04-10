@@ -216,9 +216,20 @@ This project uses [Husky](https://typicode.github.io/husky/) to run checks autom
 
 Commits are blocked if any lint check fails.
 
-## Git submodules
+## Repositóries
+
+### Main
+
+- [Proof of concept (POC) of working with Git submodules](https://github.com/adrianoenache/poc-working-with-git-submodules)
+
+### Git submodules - Packages for distribution
+
+- [Proof of concept (POC) of working with Git submodules - Packages for distribution](https://github.com/adrianoenache/poc-working-with-git-submodules-packages-for-distribution)
+
+### Sources
 
 - [Proof of concept (POC) of working with Git submodules - Compiled CSS](https://github.com/adrianoenache/poc-working-with-git-submodules-compiled-css)
+- [Proof of concept (POC) of working with Git submodules - Compiled JS](https://github.com/adrianoenache/poc-working-with-git-submodules-compiled-js.git)
 
 ## License
 
