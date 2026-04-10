@@ -18,13 +18,13 @@
     "root": "/",
     "js": {
       "source": "./src/javascript/output",
-      "output": "./assets/js",
-      "public_path": "./assets/js/"
+      "output": "./distribution/assets/js",
+      "public_path": "./distribution/assets/js/"
     },
     "css": {
       "source": "src/stylus/output",
       "lint": "src/stylus",
-      "output": "./assets/css"
+      "output": "./distribution/assets/css"
     }
   },
   "scripts": {
