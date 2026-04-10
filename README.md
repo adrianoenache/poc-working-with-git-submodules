@@ -1,6 +1,8 @@
 # Proof of concept (POC) of working with Git submodules
 
-This repository demonstrates how to work with Git submodules in a front-end project. The submodule `submodules-git/ui-kit-packages` is a UI Kit distribution package that provides a compiled CSS file (`submodules-git/ui-kit-packages/css/main.css`) consumed by the main project.
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
+This repository demonstrates how to work with Git submodules in a front-end project. The submodule `submodules-git/ui-kit-packages` is a UI Kit distribution package that provides compiled CSS, JS bundle and Stylus core config at `submodules-git/ui-kit-packages/`, consumed by the main project.
 
 > Important! This repository uses git submodules.
 
@@ -18,6 +20,8 @@ This repository demonstrates how to work with Git submodules in a front-end proj
 - [Setup & Installation](#setup--installation)
 - [Development](#development)
 - [Pre-commit hooks](#pre-commit-hooks)
+- [Troubleshooting](#troubleshooting)
+- [Repositories](#repositories)
 - [License](#license)
 
 ## Prerequisites
@@ -31,7 +35,9 @@ This repository demonstrates how to work with Git submodules in a front-end proj
 | Directory | Purpose |
 |---|---|
 | `src/javascript/` | JavaScript source files (components, modules, functions) |
+| `src/javascript/entry/` | Entry point file (`main.js`) — Webpack entry for the compiled bundle |
 | `src/stylus/` | Stylus CSS source files (atomic design structure) |
+| `src/stylus/entry/` | Entry point file (`main.styl`) — imports the full Stylus source tree |
 | `distribution/` | Distribution build output (HTML + compiled JS + CSS) |
 | `submodules-git/ui-kit-packages/` | UI Kit distribution package (git submodule) |
 | `tools/` | Build helper scripts |
@@ -187,7 +193,11 @@ After cloning the repository and initializing the submodules, install all depend
 npm run setup
 ```
 
-This command runs `npm install`, sets up Husky pre-commit hooks and starts the development watchers.
+This command runs `npm install`, sets up Husky pre-commit hooks and **starts the JS + CSS watchers** — the terminal will remain blocked while the watchers are running. To install only, without starting the watchers:
+
+```bash
+npm i && npm run prepare
+```
 
 If you need a clean reinstall (e.g. to resolve dependency conflicts):
 
@@ -199,11 +209,16 @@ This command removes `node_modules`, clears the npm cache, reinstalls all depend
 
 ## Development
 
-```bash
-npm run start    # start JS + CSS watchers in parallel
-npm run js       # compile JS only (production)
-npm run css      # lint + compile CSS only
-```
+| Command | What it does |
+|---|---|
+| `npm run start` | Start JS + CSS watchers in parallel |
+| `npm run js` | Compile JS only (production via Webpack) |
+| `npm run js-watch` | Compile JS with file watcher |
+| `npm run js-lint` | Run ESLint with auto-fix on JS source files |
+| `npm run css` | Lint + compile CSS only (production) |
+| `npm run css-lint` | Lint Stylus source files only |
+| `npm run css-comp` | Compile Stylus to CSS only |
+| `npm run css-watch` | Compile Stylus with file watcher |
 
 ## Pre-commit hooks
 
@@ -216,20 +231,41 @@ This project uses [Husky](https://typicode.github.io/husky/) to run checks autom
 
 Commits are blocked if any lint check fails.
 
-## Repositóries
+## Troubleshooting
 
-### Main
+**Submodule directory is empty after cloning**
 
-- [Proof of concept (POC) of working with Git submodules](https://github.com/adrianoenache/poc-working-with-git-submodules)
+If you cloned without `--recurse-submodules`, the `submodules-git/ui-kit-packages/` folder will be empty. Run:
 
-### Git submodules - Packages for distribution
+```bash
+git submodule init && git submodule sync && git submodule update
+```
 
-- [Proof of concept (POC) of working with Git submodules - Packages for distribution](https://github.com/adrianoenache/poc-working-with-git-submodules-packages-for-distribution)
+**Submodule is in `detached HEAD` state**
 
-### Sources
+This is expected after `git submodule update`. The submodule is checked out at the commit pointer recorded in this repository, not at the tip of a branch. To work on the submodule and push changes, navigate into the directory and check out the appropriate branch:
 
-- [Proof of concept (POC) of working with Git submodules - Compiled CSS](https://github.com/adrianoenache/poc-working-with-git-submodules-compiled-css)
-- [Proof of concept (POC) of working with Git submodules - Compiled JS](https://github.com/adrianoenache/poc-working-with-git-submodules-compiled-js.git)
+```bash
+cd submodules-git/ui-kit-packages
+git checkout <branch>
+```
+
+**Unexpected submodule changes in `git status`**
+
+If `git status` shows `modified: submodules-git/ui-kit-packages (new commits)` without you having changed anything, your local submodule pointer is ahead of what is recorded in this repository. Either commit the updated pointer (if intentional) or reset it:
+
+```bash
+git submodule update --checkout
+```
+
+## Repositories
+
+| Repository | Role |
+|---|---|
+| [poc-working-with-git-submodules](https://github.com/adrianoenache/poc-working-with-git-submodules) | This repository |
+| [poc-working-with-git-submodules-packages-for-distribution](https://github.com/adrianoenache/poc-working-with-git-submodules-packages-for-distribution) | Git submodule consumed by this repository |
+| [poc-working-with-git-submodules-compiled-css](https://github.com/adrianoenache/poc-working-with-git-submodules-compiled-css) | Generates and publishes the compiled CSS and Stylus core config |
+| [poc-working-with-git-submodules-compiled-js](https://github.com/adrianoenache/poc-working-with-git-submodules-compiled-js) | Generates and publishes the compiled JS bundle |
 
 ## License
 
