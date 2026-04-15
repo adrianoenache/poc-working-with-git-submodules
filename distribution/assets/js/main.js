@@ -1,0 +1,1 @@
+window.addEventListener("load",()=>{globalThis.DesignSystemDebug=!1,console.warn("globalThis.DesignSystemDebug: ",globalThis.DesignSystemDebug)});
